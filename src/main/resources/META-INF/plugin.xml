@@ -1,0 +1,22 @@
+<idea-plugin>
+    <id>dev.xframe.foldercompact</id>
+    <name>FolderCompact</name>
+    <vendor email="luzuojin@gmail.com" url="http://www.github.com/luzuojin">luzj</vendor>
+
+    <description><![CDATA[
+    Compact source folders <br/>
+    Display source folders similarly to Eclipse view
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <treeStructureProvider implementation="dev.xframe.fc.FolderCompactTreeStructureProvider"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
