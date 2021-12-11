@@ -1,0 +1,24 @@
+plugins {
+    id 'org.jetbrains.intellij' version '1.3.0'
+}
+
+group 'dev.xframe'
+version '1.0.0'
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    version = '2021.3'
+}
+patchPluginXml {
+    changeNotes = """
+    First Edition
+    """
+}
+
+allprojects {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        mavenLocal()
+        mavenCentral()
+    }
+}
