@@ -5,7 +5,8 @@
 
     <description><![CDATA[
     Compact source folders <br/>
-    Display source folders similarly to Eclipse view
+    Display source folders relative to the Module root folder path as one folder <br/>
+    Example: the source folder src/main/java will display as one folder<br/>
     ]]></description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
