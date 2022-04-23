@@ -15,9 +15,19 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <treeStructureProvider implementation="dev.xframe.fc.FolderCompactTreeStructureProvider"/>
+
+        <projectService serviceImplementation="dev.xframe.fc.FolderCompactConfigState"/>
     </extensions>
 
     <actions>
+        <action id="dev.xframe.fc.FolderCompactActions.CompactSourceFolder" class="dev.xframe.fc.FolderCompactActions$CompactSourceFolder"
+                text="Compact Source Folders" description="Compact Source Folders">
+            <add-to-group group-id="ProjectView.ToolWindow.Appearance.Actions" relative-to-action="ProjectView.CompactDirectories" anchor="after"/>
+        </action>
+        <action id="dev.xframe.fc.FolderCompactActions.ShowModuleLibraries" class="dev.xframe.fc.FolderCompactActions$ShowModuleLibraries"
+                text="Show Module Libraries" description="Show Module Libraries">
+            <add-to-group group-id="ProjectView.ToolWindow.Appearance.Actions" relative-to-action="ProjectView.ShowLibraryContents" anchor="after"/>
+        </action>
         <!-- Add your actions here -->
     </actions>
 </idea-plugin>
