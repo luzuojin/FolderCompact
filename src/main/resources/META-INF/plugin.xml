@@ -9,12 +9,15 @@
     Example: the source folder src/main/java will display as one folder<br/>
     ]]></description>
 
+    <idea-version since-build="2021.3"/>
+
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <treeStructureProvider implementation="dev.xframe.fc.FolderCompactTreeStructureProvider"/>
+        <treeStructureProvider implementation="dev.xframe.fc.FolderCompactTreeStructureProvider" order="last"/>
 
         <projectService serviceImplementation="dev.xframe.fc.FolderCompactConfigState"/>
     </extensions>

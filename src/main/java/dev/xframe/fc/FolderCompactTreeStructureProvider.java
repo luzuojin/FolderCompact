@@ -37,9 +37,14 @@ public class FolderCompactTreeStructureProvider implements TreeStructureProvider
 
     private List<AbstractTreeNode<?>> findSourceRootChild(PsiDirectoryNode root, AbstractTreeNode<?> node, List<AbstractTreeNode<?>> out) {
         if((node instanceof PsiDirectoryNode)) {
-            PsiDirectoryNode dir = (PsiDirectoryNode) node;
-            if(ProjectRootsUtil.isModuleSourceRoot(dir.getVirtualFile(), dir.getProject())) {
-                out.add(new CompactedFolderNode(root, dir));
+            PsiDirectoryNode dirNode = (PsiDirectoryNode) node;
+            if(ProjectRootsUtil.isModuleContentRoot(dirNode.getVirtualFile(), dirNode.getProject())) {
+//                out.add(new CompactedFolderNode(root, dirNode));
+                //无法确保该TreeStructureProvider一定在最后执行. 暂时不处理
+                return out;
+            }
+            if(ProjectRootsUtil.isModuleSourceRoot(dirNode.getVirtualFile(), dirNode.getProject())) {
+                out.add(new CompactedFolderNode(root, dirNode));
                 return out;//不再继续往下找
             }
             for (AbstractTreeNode<?> child : node.getChildren()) {

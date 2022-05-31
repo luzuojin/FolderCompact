@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'dev.xframe'
-version '1.0.2'
+version '1.0.3'
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
@@ -11,8 +11,9 @@ intellij {
 }
 patchPluginXml {
     changeNotes = """
+    1.0.3: Fix sub module display wrong<br/>
+    1.0.2: Add option action to project tools window for disable/enable folder compact<br/>
     1.0.1: Fix gradle project with sub module display wrong.<br/>
-    1.0.2: Add option action to project tools window for disable/enable folder compact
     """
 }
 

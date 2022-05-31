@@ -3,6 +3,8 @@ package dev.xframe.fc;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ViewSettings;
+import com.intellij.ide.projectView.impl.nodes.AbstractModuleNode;
+import com.intellij.ide.projectView.impl.nodes.LibraryGroupNode;
 import com.intellij.ide.projectView.impl.nodes.NamedLibraryElement;
 import com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode;
 import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode;
@@ -10,9 +12,11 @@ import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.JdkOrderEntry;
 import com.intellij.openapi.roots.LibraryOrSdkOrderEntry;
 import com.intellij.openapi.roots.LibraryOrderEntry;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ModuleSourceOrderEntry;
 import com.intellij.openapi.roots.OrderEntry;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -67,7 +71,8 @@ public class ModuleLibrariesNode extends ProjectViewNode<String> {
     //module libraries
     public static Collection<? extends AbstractTreeNode<?>> createModuleLibraries(Module module, ViewSettings settings, boolean onlyExternal) {
         List<AbstractTreeNode<?>> children = new ArrayList<>();
-        ProjectFileIndex fileIndex = ProjectRootManager.getInstance(module.getProject()).getFileIndex();
+        Project project = module.getProject();
+        ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
         final OrderEntry[] orderEntries = ModuleRootManager.getInstance(module).getOrderEntries();
         for (OrderEntry entry : orderEntries) {
             if (entry instanceof LibraryOrderEntry) {
@@ -81,13 +86,19 @@ public class ModuleLibrariesNode extends ProjectViewNode<String> {
                 }
                 final String libraryName = library.getName();
                 if (libraryName == null || libraryName.length() == 0) {
-                    addLibraryChildren(libraryOrderEntry, children, module.getProject(), settings);
+                    addLibraryChildren(libraryOrderEntry, children, project, settings);
                 } else {
-                    children.add(new NamedLibraryElementNode(module.getProject(), new NamedLibraryElement(module, libraryOrderEntry), settings));
+                    children.add(new NamedLibraryElementNode(project, new NamedLibraryElement(module, libraryOrderEntry), settings));
                 }
-            } else if(entry instanceof LibraryOrSdkOrderEntry) {
-                children.add(new NamedLibraryElementNode(module.getProject(), new NamedLibraryElement(module, (LibraryOrSdkOrderEntry) entry), settings));
+            } else if (entry instanceof JdkOrderEntry) {
+                JdkOrderEntry jdkOrderEntry = (JdkOrderEntry) entry;
+                if (jdkOrderEntry.getJdk() != null) {
+                    children.add(new NamedLibraryElementNode(project, new NamedLibraryElement(module, jdkOrderEntry), settings));
+                }
             }
+        }
+        for (Module dependency : ModuleRootManager.getInstance(module).getDependencies()) {
+            children.add(new ModuleDependenceNode(project, dependency, settings));
         }
         return children;
     }
@@ -182,6 +193,20 @@ public class ModuleLibrariesNode extends ProjectViewNode<String> {
         @Override
         public boolean canRepresent(Object element) {
             return false; //this == element;
+        }
+    }
+
+    public static class ModuleDependenceNode extends AbstractModuleNode {
+        protected ModuleDependenceNode(Project project, @NotNull Module module, ViewSettings viewSettings) {
+            super(project, module, viewSettings);
+        }
+        @Override
+        public @NotNull Collection<? extends AbstractTreeNode<?>> getChildren() {
+            return Collections.emptyList();
+        }
+        @Override
+        protected boolean showModuleNameInBold() {
+            return false;
         }
     }
 }
