@@ -9,7 +9,7 @@
     Example: the source folder src/main/java will display as one folder<br/>
     ]]></description>
 
-    <idea-version since-build="2021.3"/>
+    <idea-version since-build="213"/>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
