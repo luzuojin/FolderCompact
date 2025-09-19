@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'dev.xframe'
-version '1.0.5'
+version '1.0.6'
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
@@ -12,6 +12,7 @@ intellij {
 }
 patchPluginXml {
     changeNotes = """
+    1.0.6: Fix issue where sibling folders of the source folders were not displayed <br/>
     1.0.5: Fix idea version compatible -> api removed <br/>
     1.0.4: Fix idea version compatible <br/>
     1.0.3: Fix sub module display wrong <br/>

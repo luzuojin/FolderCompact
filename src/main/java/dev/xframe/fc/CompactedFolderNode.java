@@ -19,6 +19,10 @@ public class CompactedFolderNode extends PsiDirectoryNode {
         data.setPresentableText(relativeIfUnder(getVirtualFile().getPath(), root.getVirtualFile().getPath()));
     }
 
+    public int depth() {
+        return relativeIfUnder(getVirtualFile().getPath(), root.getVirtualFile().getPath()).split("/").length;
+    }
+
     /* copy from com.intellij.history.core.Paths */
     private static boolean myIsCaseSensitive = SystemInfo.isFileSystemCaseSensitive;
     public static String relativeIfUnder(String path, String root) {
@@ -51,7 +55,6 @@ public class CompactedFolderNode extends PsiDirectoryNode {
             if (parent.charAt(parent.length() - 1) != '/') {
                 parent = parent + "/";
             }
-
             return parent;
         }
     }

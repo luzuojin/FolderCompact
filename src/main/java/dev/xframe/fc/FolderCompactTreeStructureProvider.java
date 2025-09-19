@@ -32,7 +32,7 @@ public class FolderCompactTreeStructureProvider implements TreeStructureProvider
 
     private List<AbstractTreeNode<?>> compact(PsiDirectoryNode root, AbstractTreeNode<?> node) {
         List<AbstractTreeNode<?>> found = findSourceRootChild(root, node, new ArrayList<>());
-        return found.isEmpty() ? Arrays.asList(node) : found;
+        return found.isEmpty() ? Arrays.asList(node) : findNotSourceRootChild(root, node, found.stream().map(e -> ((CompactedFolderNode) e).getVirtualFile().getPath()).collect(Collectors.toList()), found);
     }
 
     private List<AbstractTreeNode<?>> findSourceRootChild(PsiDirectoryNode root, AbstractTreeNode<?> node, List<AbstractTreeNode<?>> out) {
@@ -54,4 +54,20 @@ public class FolderCompactTreeStructureProvider implements TreeStructureProvider
         return out;
     }
 
+    //node:src  compacted:src/main/java --> out src/main/sql...etc
+    private static List<AbstractTreeNode<?>> findNotSourceRootChild(PsiDirectoryNode root, AbstractTreeNode<?> node, List<String> compactedPaths, List<AbstractTreeNode<?>> out) {
+        for (AbstractTreeNode<?> child : node.getChildren()) {
+            if((child instanceof PsiDirectoryNode)) {
+                PsiDirectoryNode dirNode = (PsiDirectoryNode) child;
+                if(compactedPaths.stream().anyMatch(e -> dirNode.getVirtualFile().getPath().equals(e))) {
+                    //skip compacted source folders
+                } else if(compactedPaths.stream().anyMatch(e -> CompactedFolderNode.isParent(dirNode.getVirtualFile().getPath(), e))) {
+                    findNotSourceRootChild(root, child, compactedPaths, out);//parentOf compacted source folders, compact child similar as source folders
+                } else {
+                    out.add(new CompactedFolderNode(root, dirNode));
+                }
+            }
+        }
+        return out;
+    }
 }
